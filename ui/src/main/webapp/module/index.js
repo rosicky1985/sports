@@ -50,7 +50,7 @@ var table_frame =
 
 $.ajax({
     type: "GET",
-    url: `http://localhost:8080/stock?after=${now_str}`,
+    url: `http://localhost:19090/stock?after=${now_str}`,
     success: function(data){
         var data_tbody = $('#data');
         console.log("成功更新... " + data);
@@ -93,7 +93,10 @@ $.ajax({
                         var float = $(`<td class="number">${line.float}%</td>`);
                         tr.append(float);
                         if(line.float > 0) {float.addClass('up')}else{float.addClass('down')}
-                        tr.append($(`<td>${line.time}</td>`));
+                        var time = $(`<td>${line.time}</td>`);
+                        console.log(line.time.substr(11,2));
+                        if('17' == line.time.substr(11,2)) { time.addClass('right_time');}
+                        tr.append(time);
                     }
                     odd = !odd;
                 }
