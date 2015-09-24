@@ -1,0 +1,101 @@
+<div class="modal fade" id="detail_dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="service_op" id="btn_view">
+                    <button class="btn btn-primary btn-xs" type="button">
+                        <span class="glyphicon glyphicon-step-backward" title="取消编辑"></span>
+                        取消编辑
+                    </button>
+                </span>
+                <span class="service_op" id="btn_delete">
+                    <button class="btn btn-primary btn-xs" type="button">
+                        <span class="glyphicon glyphicon-trash" title="删除"></span>
+                        删除
+                    </button>
+                </span>
+                <span class="service_op" id="btn_edit">
+                    <button class="btn btn-primary btn-xs" type="button">
+                        <span class="glyphicon glyphicon-pencil" title="编辑"></span>
+                        编辑
+                    </button>
+                </span>
+
+                <h4 class="modal-title">
+                    <span id="dialog_title"></span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="fm_service_id" name="id">
+                    <div class="form-group">
+                        <label class="col-sm-2 field">名称</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_name" class="view"></span>
+                            <input type="text" name="name" id="fm_service_name" placeholder="服务名称" class="form-input form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">url</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_url" class="view"></span>
+                            <input type="text" name="url" id="fm_service_url" placeholder="[协议]://[地址](:[端口])/[endpoint](?[参数])" class="form-input form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">ip</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_ip" class="view"></span>
+                            <span class="form-input">
+                                <input type="text" name="ip" id="fm_service_ip" placeholder="xxx.xxx.xxx.xxx">
+                                </input>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">位置</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_location" class="view"></span>
+                            <span class="form-input">
+                                <input type="text" name="location" id="fm_service_location" >
+                                </input>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">状态</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_status" class="view"></span>
+                            <span class="form-input">
+                                <input type="text" name="status" id="fm_service_status" >
+                                </input>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">类型</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_type" class="view"></span>
+                            <span class="form-input">
+                                <input type="text" name="_type" id="fm_service_type" >
+                                </input>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 field">备注</label>
+                        <div class="col-sm-10 value">
+                            <span id="service_comment" class="view"></span>
+                            <textarea name="comment" id="fm_service_comment" class="form-control form-input" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-xs" style="display:none">确认</button>
+            </div>
+        </div>
+    </div>
+</div>

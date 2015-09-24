@@ -1,0 +1,13 @@
+.classpath
+.project
+.settings
+.metadata/
+.idea/
+*.swp
+*.DS_Store
+*.iml
+bin/
+target/
+Servers
+cps/src/main/resources/git.properties
+ui/src/main/webapp/jspm_packages/

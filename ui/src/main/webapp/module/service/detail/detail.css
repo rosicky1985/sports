@@ -1,0 +1,20 @@
+.field {
+    text-align: right;
+    font-weight: bold
+}
+.value {
+    text-align: left;
+}
+.service_op {
+    //font-size: 12px;
+    //color: gray;
+    padding-right: 8px;
+    float:right;
+}
+.form-input {
+    //width: 100%;
+}
+
+.modal-header, .modal-footer {
+    padding: 8px 15px 8px 15px;
+}

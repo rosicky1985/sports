@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>sport.finance</title>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+    <script>
+        System.import('module/index');
+    </script>
+    <style>
+        body, .row {
+            margin-top:20px
+        }
+        div.date {
+            display: inline;
+            padding: 10px 10px;
+        }
+        div.date.active {
+            border: 1px solid #ddd;
+            background-color: white !important;
+            border-bottom-style: none;
+        }
+        div.date.today {
+            font-weight:bold;
+        }
+        div.date.no_data{
+            color:lightgray;
+        }
+        tr.odd {
+            background-color: while;
+        }
+        tr.even {
+            background-color: aliceblue;
+        }
+        table.table {
+            width:auto;
+            margin-top: 5px;
+        }
+        td.number {
+            text-aligh: right;
+        }
+        td.up {
+            color: red;
+        }
+        td.down {
+            color: green;
+        }
+    </style>
+</head>
+    <body class="container">
+<div class="row">
+    <div id="calendar"></div>
+</div>
+<div class="row" id="data" style="border-top: 1px #ddd solid; margin:8px">
+
+</div>
+
+</body>
+</html>
