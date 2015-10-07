@@ -17,7 +17,9 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-slf4j" % "2.1.4",
   "ch.qos.logback" % "logback-classic" % "1.0.13",
   "net.databinder.dispatch" % "dispatch-core_2.10" % "0.11.3",
-  "com.github.philcali" %% "cronish" % "0.1.3"
+  "com.github.philcali" %% "cronish" % "0.1.3",
+  "org.jsoup" % "jsoup" % "1.8.3",
+  "org.scalaj" % "scalaj-time_2.10.2" % "0.7"
 )
 
 resolvers ++= Seq(
