@@ -1,6 +1,7 @@
 package com.nbb.spider.news.baidu
 
 import akka.event.slf4j.SLF4JLogging
+import org.joda.time.DateTime
 import org.jsoup._
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -8,11 +9,37 @@ import java.util.Date
 
 
 case class News(
-                 created: Date,
-                 key: String, category: String,
+                 created: DateTime,
+                 key: String, category: String, id: Int,
                  title: String, author: Option[String], summary: String,
-                 s_targetTime: String, d_targetTime: Option[Date],
+                 s_targetTime: String, d_targetTime: Option[DateTime],
                  follow_num: Option[Int], follow_href: Option[String]) {
+}
+
+case class NewsQuery(category:Option[String], targetDay:Option[Date], createdDay:Option[Date])
+
+import scala.slick.driver.MySQLDriver.simple._
+object NewsORM extends Table[News]("news_baidu"){
+  def created = column[DateTime]("created")
+  def key = column[String]("key")
+  def category = column[String]("category")
+  def title = column[String]("title")
+  def id = column[Int]("id")
+  def author = column[String]("author",O.Nullable)
+  def summary = column[String]("summary")
+  def s_targetTime = column[String]("s_targetTime")
+  def d_targetTime = column[DateTime]("d_targetTime",O.Nullable)
+  def follow_num = column[Int]("follow_num",O.Nullable)
+  def follow_href = column[String]("follow_href",O.Nullable)
+
+  def * = created ~ key ~ category ~ id ~ title ~ author.? ~ summary ~ s_targetTime ~ d_targetTime.? ~ follow_num.? ~ follow_href.? <> (News.apply _, News.unapply _)
+
+  implicit val dateTypeMapper = MappedTypeMapper.base[org.joda.time.DateTime, java.sql.Timestamp](
+  {
+    ud => new java.sql.Timestamp(ud.toDate.getTime)
+  }, {
+    sd => new DateTime(sd.getTime)
+  })
 }
 
 object News extends SLF4JLogging {
@@ -21,19 +48,19 @@ object News extends SLF4JLogging {
     def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
   }
 
-  def targetStrToDate(s_targetTime: String, now: Date) = {
+  def targetStrToDate(s_targetTime: String, now: Date):Option[DateTime] = {
     def sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm")
     try {
-      Some(sdf.parse(s_targetTime))
+      Some(new DateTime(sdf.parse(s_targetTime)))
     } catch {
       case e: Exception =>
 
         import org.scala_tools.time.Imports._
         s_targetTime match {
           case r"([0-9]+)${i}小时前" =>
-            Some(new DateTime(now).minusHours(i.toInt).withMinuteOfHour(0).withSecondOfMinute(0).toDate)
+            Some(new DateTime(now).minusHours(i.toInt).withMinuteOfHour(0).withSecondOfMinute(0))
           case r"([0-9]+)${i}分钟前" =>
-            Some(new DateTime(now).minusMinutes(i.toInt).withSecondOfMinute(0).toDate)
+            Some(new DateTime(now).minusMinutes(i.toInt).withSecondOfMinute(0))
           case _ => None
         }
     }
@@ -72,6 +99,7 @@ object News extends SLF4JLogging {
     val contents_div = Jsoup.parse(html_baidu).select("#content_left > div:nth-child(3) > div[id]")
     import scala.collection.JavaConversions._
     for (c <- contents_div.iterator().toList) yield {
+      val id = c.attr("id").toInt
       val title = c.select(".c-title").first.text
       val c_summary_div = c.select(".c-summary").first
       val c_author_text = c_summary_div.select(".c-author").first.text
@@ -99,8 +127,8 @@ object News extends SLF4JLogging {
       }
       val summary = summary_step2.trim
 
-      News(created,
-        key,category,
+      News(new DateTime(created),
+        key,category,id,
         title, author, summary,
         s_targetTime, d_target,
         follow_num_a._1, follow_num_a._2)

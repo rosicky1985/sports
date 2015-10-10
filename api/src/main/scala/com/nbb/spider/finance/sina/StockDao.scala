@@ -2,16 +2,14 @@ package com.nbb.spider.finance.sina
 
 import java.sql.SQLException
 
-import com.bestv.cps.service.rest.{FailureType, Failure}
-import com.nbb.spider.config.Configuration
+import com.bestv.cps.service.rest.Failure
 import com.nbb.spider.dao.DaoUtils
 
 import scala.slick.driver.MySQLDriver.simple._
-import scala.slick.session.Database
-import Database.threadLocalSession
+import scala.slick.session.Database.threadLocalSession
 
 
-class StockDao extends Configuration with DaoUtils {
+class StockDao extends DaoUtils {
   def query(q: StockQuery): Either[Failure, _] = {
     try {
       implicit val typeMapper = Stocks.dateTypeMapper
@@ -30,8 +28,6 @@ class StockDao extends Configuration with DaoUtils {
   }
 
 
-  val db = Database.forURL(url = "jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=UTF-8".format(dbHost, dbPort, dbName),
-    user = dbUser, password = dbPassword, driver = "com.mysql.jdbc.Driver")
 
   def create(stock: Stock): Either[Failure, Stock] = {
     try {

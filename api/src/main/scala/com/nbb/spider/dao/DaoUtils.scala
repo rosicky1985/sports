@@ -3,8 +3,13 @@ package com.nbb.spider.dao
 import java.sql.SQLException
 
 import com.bestv.cps.service.rest.{FailureType, Failure}
+import com.nbb.spider.config.Configuration
 
-trait DaoUtils {
+import scala.slick.session.Database
+
+trait DaoUtils extends Configuration{
+  val db = Database.forURL(url = "jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=UTF-8".format(dbHost, dbPort, dbName),
+    user = dbUser, password = dbPassword, driver = "com.mysql.jdbc.Driver")
   /**
    * Produce database error description.
    *

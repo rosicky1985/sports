@@ -1,6 +1,7 @@
 package com.nbb.spider.boot
 
-import com.nbb.spider.finance.sina.{StockDao, Stock}
+import com.nbb.spider.finance.sina.Stock
+import com.nbb.spider.finance.sina.StockDao
 
 /**
  * Created by rosicky on 15-9-21.

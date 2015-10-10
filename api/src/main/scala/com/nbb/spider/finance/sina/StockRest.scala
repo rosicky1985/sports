@@ -1,11 +1,12 @@
 package com.nbb.spider.finance.sina
 
+import java.util.Date
+
 import akka.event.slf4j.SLF4JLogging
 import com.bestv.cps.service.rest.RestUtils
+import spray.http.HttpHeaders.RawHeader
 import spray.http._
 import spray.routing.RequestContext
-import spray.http.HttpHeaders.RawHeader
-import java.util.Date
 
 /**
  * REST Service
