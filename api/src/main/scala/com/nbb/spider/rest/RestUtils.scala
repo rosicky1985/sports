@@ -5,6 +5,7 @@ import java.util.Date
 
 import net.liftweb.json.Serialization._
 import net.liftweb.json.{DateFormat, Formats}
+import org.joda.time.DateTime
 import spray.http._
 import spray.httpx.unmarshalling._
 import spray.routing.{RequestContext, HttpService, RejectionHandler}
@@ -12,7 +13,7 @@ import spray.routing.{RequestContext, HttpService, RejectionHandler}
 trait RestUtils extends HttpService {
 
   implicit val executionContext = actorRefFactory.dispatcher
-
+  //json在序列化/反序列化Date的时候用的格式转换
   implicit val liftJsonFormats = new Formats {
     val dateFormat = new DateFormat {
       val sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

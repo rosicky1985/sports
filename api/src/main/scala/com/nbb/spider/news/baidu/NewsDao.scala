@@ -4,6 +4,7 @@ import java.sql.SQLException
 
 import com.bestv.cps.service.rest.Failure
 import com.nbb.spider.dao.DaoUtils
+import org.scala_tools.time.Imports._
 
 import scala.slick.driver.MySQLDriver.simple._
 import scala.slick.session.Database.threadLocalSession
@@ -20,7 +21,9 @@ class NewsDao extends DaoUtils {
     }
   }
 
+  implicit val typeMapperDelegate = NewsORM.dateTypeMapper
   import org.scala_tools.time.Imports._
+  val today = SimpleFunction.unary[DateTime,DateTime]("date")
   def dayrange(targetDay: DateTime) = {
     val today = targetDay.toLocalDate
     val tomorrow = today.plusDays(1)
@@ -28,10 +31,10 @@ class NewsDao extends DaoUtils {
     val startOfTomorrow = tomorrow.toDateTimeAtStartOfDay(targetDay.getZone)
     (startOfToday,startOfTomorrow)
   }
+
   def query(q: NewsQuery):Either[Failure, List[News]] = {
     try{
-      implicit val typeMapperDelegate = NewsORM.dateTypeMapper
-      val today = SimpleFunction.unary[DateTime,DateTime]("date")
+
       val query = for{ n <- NewsORM if {
         Seq(
           q.category.map(n.category like "%%%s%%".format(_)),
@@ -43,6 +46,33 @@ class NewsDao extends DaoUtils {
         }
       }} yield n
       Right(db.withSession(query.list))
+    }catch {
+      case e:SQLException => Left(databaseError(e))
+    }
+  }
+
+  def distinct_created = {
+    try{
+      val query = for{ n <- NewsORM} yield n
+      Right(db.withSession(query.groupBy(l => today(l.created)).map(_._1).run.toList))
+    }catch {
+      case e: SQLException => Left(databaseError(e))
+    }
+  }
+
+  def distinct_target = {
+    try{
+      val query = for{ n <- NewsORM} yield n
+      Right(db.withSession(query.groupBy(l => today(l.d_targetTime)).map(_._1).run.toList))
+    }catch {
+      case e: SQLException => Left(databaseError(e))
+    }
+  }
+
+  def distinct_category = {
+    try{
+      val query = for( n <- NewsORM ) yield n
+      Right(db.withSession(query.groupBy(_.category).map(_._1).run.toList))
     }catch {
       case e:SQLException => Left(databaseError(e))
     }

@@ -28,17 +28,17 @@ trait StockRest extends SLF4JLogging with RestUtils {
               stocks
             }
         } ~
-          get {
-            parameters('after.as[Date] ?).as(StockQuery) {
-              q:StockQuery => {
-                ctx: RequestContext =>
-                  handleRequest(ctx) {
-                    log.debug("查询Stock条件: %s".format(q))
-                    stockDao.query(q)
-                  }
-              }
+        get {
+          parameters('after.as[Date] ?).as(StockQuery) {
+            q:StockQuery => {
+              ctx: RequestContext =>
+                handleRequest(ctx) {
+                  log.debug("查询Stock条件: %s".format(q))
+                  stockDao.query(q)
+                }
             }
           }
+        }
       }
     }
   }
