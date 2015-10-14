@@ -4,13 +4,27 @@ import java.text.{ParseException, SimpleDateFormat}
 import java.util.Date
 
 import net.liftweb.json.Serialization._
-import net.liftweb.json.{DateFormat, Formats}
-import org.joda.time.DateTime
+import net.liftweb.json._
+import net.liftweb.json.ext.JodaTimeSerializers
 import spray.http._
 import spray.httpx.unmarshalling._
 import spray.routing.{RequestContext, HttpService, RejectionHandler}
 
+
 trait RestUtils extends HttpService {
+
+  val sdf = new SimpleDateFormat("yyyy-MM-dd")
+
+  //case object DateTimeSerializer extends CustomSerializer[DateTime](format => ( {
+  //  case JString(s) => new DateTime(sdf.parse(s))
+  //  case JNull => null
+  //}, {
+  //  case d: DateTime => JString(format.dateFormat.format(d.toDate))
+  //}))
+
+  private val default: DefaultFormats with Object {def dateFormatter: SimpleDateFormat} = new DefaultFormats {
+    override def dateFormatter = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+  }
 
   implicit val executionContext = actorRefFactory.dispatcher
   //json在序列化/反序列化Date的时候用的格式转换
@@ -26,7 +40,7 @@ trait RestUtils extends HttpService {
 
       def format(d: Date): String = sdf.format(d)
     }
-  }
+  } ++ JodaTimeSerializers.all
 
   implicit val string2Date = new FromStringDeserializer[Date] {
     def apply(value: String) = {
